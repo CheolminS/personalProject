@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시간관련기능</title>
+    <style>
+        *{margin: 0 auto;}
+        html{background-color: black;}
+    </style>
+</head>
+
+<body>
+    <input type="button" value="시간 표시" onclick="showPopup()">
+    <input type="button" value="스탑워치">
+    <input type="button" value="타이머">
+    <input type="button" value="시간계산">
+    <input type="button" value="수능카운트다운">
+
+    <script>
+        function showPopup() {
+            window.open("현재시간.html", "현재시간", "width=300, height=300, left=100, top=50");
+        }
+        document.querySelector("input[value=스탑워치]").onclick = function () {
+            window.open("스탑워치.html", "스탑워치", "width=300, height=300, left=100, top=50");
+        }
+        document.querySelector("input[value=타이머]").onclick = function () {
+            window.open("타이머.html", "타이머", "width=300, height=300, left=100, top=50");
+        }
+        document.querySelector("input[value=시간계산]").onclick = function () {
+            window.open("시간계산.html", "시간계산", "width=300, height=300, left=100, top=50");
+        }
+        document.querySelector("input[value=수능카운트다운]").onclick = function () {
+            window.open("2022수능.html", "시간계산", "width=300, height=300, left=100, top=50");
+        }
+    </script>
+</body>
+
+</html>

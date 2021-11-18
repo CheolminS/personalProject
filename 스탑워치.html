@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스탑워치</title>
+    <style>
+        *{margin: 0 auto;}
+        html{background-color: black;}
+        #displayTime{font-family: 'Times New Roman', Times, serif; font-size: 20pt; font-weight: bolder; color: #ddd;}
+        ul>li{font-family: 'Times New Roman', Times, serif; font-size: 13pt; font-weight: bolder; color: #ddd;}
+        .display_none{display: none;}
+    </style>
+</head>
+<body>
+    <button id="start">측정</button> <button id="stop" class="display_none">리셋</button> <button id="record" class="display_none">기록</button>
+    <button id="pause" class="display_none">일시정지</button><button id="restart" class="display_none">다시시작</button>
+    <p id="displayTime"></p>
+    <ul id = "recordList"><hr></ul>
+    <script>
+        var interv;
+        var str;
+        var nowMillisec = 0;
+        document.querySelector("button[id=start]").onclick = function () {
+            var old = Date.now();
+            document.querySelector("button[id=start]").classList.add("display_none");
+            document.querySelector("button[id=stop]").classList.remove("display_none");
+            document.querySelector("button[id=record]").classList.remove("display_none");
+            document.querySelector("button[id=pause]").classList.remove("display_none");
+            interv =setInterval(() => {
+                var news = Date.now();
+                var data = (news - old);
+                nowMillisec = data;
+                var millisecD = (Math.floor((nowMillisec % 1000)/10)).toString().padStart(2,'0');
+                var sec = Math.floor(nowMillisec/1000);
+                var secD = (sec%60).toString().padStart(2,'0');
+                var min = Math.floor((nowMillisec/1000)/60);
+                var minD = (min%60).toString().padStart(2,'0');
+                var hour = Math.floor(((nowMillisec/1000)/60)/60);
+                var hourD = hour;
+                str = hourD+":"+minD+":"+secD+"  "+millisecD;
+                document.getElementById("displayTime").innerHTML = str;
+            }, 10);
+        }
+        document.querySelector("button[id=stop]").onclick = function () {
+            clearInterval(interv);
+            document.querySelector("button[id=start]").classList.remove("display_none");
+            document.querySelector("button[id=stop]").classList.add("display_none");
+            document.querySelector("button[id=record]").classList.add("display_none");
+            document.querySelector("button[id=pause]").classList.add("display_none");
+            document.querySelector("button[id=restart]").classList.add("display_none");
+            document.getElementById("displayTime").innerHTML = "";
+            document.getElementById("recordList").innerHTML = "";
+            nowMillisec = 0;
+        }
+        document.querySelector("button[id=record]").onclick = function () {
+            var strRecord = "<li>"+str+"</li><hr>"
+            document.getElementById("recordList").innerHTML += strRecord;
+        }
+        document.querySelector("button[id=pause]").onclick = function () {
+            document.querySelector("button[id=pause]").classList.add("display_none");
+            document.querySelector("button[id=restart]").classList.remove("display_none");
+            clearInterval(interv);
+        }
+        document.querySelector("button[id=restart]").onclick = function () {
+            document.querySelector("button[id=pause]").classList.remove("display_none");
+            document.querySelector("button[id=restart]").classList.add("display_none");
+            var old = Date.now();
+            var add = nowMillisec;
+            interv =setInterval(() => {
+                var news = Date.now();
+                var data = (news - old);
+                nowMillisec1 = add+data;
+                nowMillisec = nowMillisec1;
+                var millisecD = (Math.floor((nowMillisec1 % 1000)/10)).toString().padStart(2,'0');
+                var sec = Math.floor(nowMillisec1/1000);
+                var secD = (sec%60).toString().padStart(2,'0');
+                var min = Math.floor((nowMillisec1/1000)/60);
+                var minD = (min%60).toString().padStart(2,'0');
+                var hour = Math.floor(((nowMillisec1/1000)/60)/60);
+                var hourD = hour;
+                str = hourD+":"+minD+":"+secD+"  "+millisecD;
+                document.getElementById("displayTime").innerHTML = str;
+            }, 10);
+        }
+    </script>
+</body>
+</html>

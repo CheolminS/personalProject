@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시간계산기</title>
+    <style>
+        *{margin: 0 auto;}
+        html{background-color: black;}
+        .display_none{display: none;}
+        li{font-family: 'Times New Roman', Times, serif; font-size: 15pt; color:#ddd;}
+        #total{font-family: 'Times New Roman', Times, serif; font-size: 20pt; font-weight: bolder; color:skyblue;}
+        body{color: #ddd;}
+        input{background-color: rgba(169, 169, 169, 0.5); color: #ddd;}
+    </style>
+</head>
+<body>
+    시간: <input type="number" min="0" name="hour" value="0"><br>
+    분: <input type="number" min="0" max="59" name="minute" value="0"><br>
+    초: <input type="number" min="0" max="59" name="second" value="0"><br>
+    <button type="button" id="insert" onclick="insert(parseInt(document.querySelector('input[name=hour]').value)
+    ,parseInt(document.querySelector('input[name=minute]').value)
+    ,parseInt(document.querySelector('input[name=second]').value))">입력</button>
+    <button type="button" id="reset" onclick="reset()" class="display_none">초기화</button>
+    <p id="total"></p>
+    <ul id="list"></ul>
+    <script>
+        var total = 0;
+        var listNum = 1;
+        function insert(hour,minute,second) {
+            document.querySelector("button[id=reset]").classList.remove("display_none");
+            var times = hour*3600+minute*60+second;
+            document.getElementById("list").innerHTML += "<li id=list"+listNum+">"+hour.toString().padStart(2, '0')
+                +":"+minute.toString().padStart(2, '0')
+                +":"+second.toString().padStart(2, '0')
+                +"<button type=button id=list"+listNum+" value="+times+" onclick=remove('list"+listNum+"')>삭제</button>"+"</li>";
+            total += times;
+            displayTotal(total);
+            listNum++;
+        }
+        function displayTotal(total) {
+            var vSecond = total % 60;
+            var vMinute = (Math.floor(total / 60)) % 60;
+            var vHour = Math.floor((total/60)/60) % 24;
+            var vDay = Math.floor(((total/60)/60)/24);
+            if (vDay == 1) {
+                document.getElementById("total").innerHTML = "Total: "+vDay+"day "+vHour.toString().padStart(2, '0')+":"+vMinute.toString().padStart(2, '0')+":"+vSecond.toString().padStart(2, '0');
+            } else {
+                document.getElementById("total").innerHTML = "Total: "+vDay+"days "+vHour.toString().padStart(2, '0')+":"+vMinute.toString().padStart(2, '0')+":"+vSecond.toString().padStart(2, '0');
+            }
+        }
+        function remove(targetToRemove) {
+            var str1 = "li[id="+targetToRemove+"]";
+            var str2 = "button[id="+targetToRemove+"]";
+            var dTimes = document.querySelector(str2).value;
+            total -= dTimes;
+            displayTotal(total);
+            document.querySelector(str1).remove();
+        }
+        function reset() {
+            document.querySelector("button[id=reset]").classList.add("display_none");
+            document.querySelector("ul").innerHTML = "";
+            document.getElementById("total").innerHTML = "";
+            document.querySelector("input[name=hour]").value = "0";
+            document.querySelector("input[name=minute]").value = "0";
+            document.querySelector("input[name=second]").value = "0";
+            total = 0;
+            listNum = 1;
+        }
+    </script>
+</body>
+</html>

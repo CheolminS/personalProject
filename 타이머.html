@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타이머</title>
+    <style>
+        *{margin: 0 auto;}
+        html{background-color: black;}
+        div{color: #ddd;}
+        #timer1{font-family: 'Times New Roman', Times, serif; font-size: 20pt; font-weight: bolder; color: #ddd;}
+        #timer2{font-family: 'Times New Roman', Times, serif; font-size: 20pt; font-weight: bolder;}
+        .display_none{display: none;}
+        input{background-color: rgba(169, 169, 169, 0.5); color: #ddd;}
+    </style>
+</head>
+
+<body>
+    <div><strong> 타이머1</strong></div>
+    <input type="number" name="hour" min="0" placeholder="시간"><br>
+    <input type="number" name="minute" min="0" placeholder="분"><br>
+    <input type="number" name="second" min="0" placeholder="초"><br>
+    <button id="start1">시작</button><button id="reset1" class="display_none">리셋</button><br>
+    <button id="pause" class="display_none">일시정지</button><button id="restart" class="display_none">다시시작</button>
+    <p id="timer1"></p>
+    <div><strong> 타이머2(카운트업 포함)</strong></div>
+    <div>시간을 입력하세요.</div>
+    <input type="date" name="inputDate">
+    <input type="time" name="inputTime" step="2">
+    <button id="start2">시작</button><button id="reset2" class="display_none">리셋</button>
+    <p id="timer2"></p>
+    <script>
+        var interv;
+        var datas = 0;
+        document.querySelector("button[id=start1]").onclick = function () {
+            if (document.querySelector("input[name=hour]").value == "") {
+                document.querySelector("input[name=hour]").value = "0";
+            }
+            if (document.querySelector("input[name=minute]").value == "") {
+                document.querySelector("input[name=minute]").value = "0";
+            }
+            if (document.querySelector("input[name=second]").value == "") {
+                document.querySelector("input[name=second]").value = "0";
+            }
+            document.querySelector("button[id=start1]").classList.add("display_none");
+            document.querySelector("button[id=reset1]").classList.remove("display_none");
+            document.querySelector("button[id=pause]").classList.remove("display_none");
+            var hour = parseInt(document.querySelector("input[name=hour]").value);
+            var minute = parseInt(document.querySelector("input[name=minute]").value);
+            var second = parseInt(document.querySelector("input[name=second]").value);
+            var input = hour * 60 * 60 * 1000 + minute * 60 * 1000 + second * 1000;
+            var old = Date.now();
+            var news;
+            var streamTime;
+            interv = setInterval(() => {
+                news = Date.now();
+                streamTime = (news - old);
+                datas = (input - streamTime);
+                setTimer(datas, "timer1");
+                if (datas < 0) {
+                    clearInterval(interv);
+                    document.getElementById("timer1").innerHTML = "TIME OVER";
+                    document.querySelector("button[id=pause]").classList.add("display_none");
+                    document.querySelector("button[id=restart]").classList.add("display_none");
+                }
+            }, 10);
+        }
+        document.querySelector("button[id=reset1]").onclick = function () {
+            document.querySelector("button[id=start1]").classList.remove("display_none");
+            document.querySelector("button[id=reset1]").classList.add("display_none");
+            document.querySelector("button[id=pause]").classList.add("display_none");
+            document.querySelector("button[id=restart]").classList.add("display_none");
+            document.querySelector("input[name=hour]").value = ""
+            document.querySelector("input[name=minute]").value = ""
+            document.querySelector("input[name=second]").value = ""
+            document.getElementById("timer1").innerHTML = "";
+            datas = 0;
+            clearInterval(interv);
+        }
+        document.querySelector("button[id=pause]").onclick = function () {
+            document.querySelector("button[id=pause]").classList.add("display_none");
+            document.querySelector("button[id=restart]").classList.remove("display_none");
+            clearInterval(interv);
+        }
+        document.querySelector("button[id=restart]").onclick = function () {
+            document.querySelector("button[id=pause]").classList.remove("display_none");
+            document.querySelector("button[id=restart]").classList.add("display_none");
+            var old = Date.now();
+                var news;
+                var streamTime;
+                var remain = datas;
+                interv = setInterval(() => {
+                    news = Date.now();
+                    streamTime = (news - old);
+                    datas = (remain - streamTime);
+                    setTimer(datas, "timer1");
+                    if (datas < 0) {
+                        clearInterval(interv);
+                        document.getElementById("timer1").innerHTML = "TIME OVER";
+                        document.querySelector("button[id=pause]").classList.add("display_none");
+                        document.querySelector("button[id=restart]").classList.add("display_none");
+                    }
+                }, 10);
+        }
+        var interv1;
+        document.querySelector("button[id=start2]").onclick = function () {
+            document.querySelector("button[id=start2]").classList.add("display_none");
+            document.querySelector("button[id=reset2]").classList.remove("display_none");
+            document.getElementById("timer2").style.color = "#ddd";
+            if (document.querySelector("input[type=date]").value != "" && document.querySelector("input[type=time]").value != ""){
+                var str = document.querySelector("input[type=date]").value + " " + document.querySelector("input[type=time]").value;
+                var targetTime = new Date(str);
+                interv1 = setInterval(() => {
+                    var now = new Date();
+                    var subMilliseconds = targetTime.valueOf()-now.valueOf();
+                    if(subMilliseconds >= 0){
+                        setTimer(subMilliseconds, "timer2");
+                    } else {
+                        subMilliseconds = Math.abs(subMilliseconds);
+                        document.getElementById("timer2").style.color = "skyblue";
+                        setTimer(subMilliseconds, "timer2");
+                    }
+                }, 10);
+            }
+        }
+        document.querySelector("button[id=reset2]").onclick = function () {
+            document.querySelector("button[id=start2]").classList.remove("display_none");
+            document.querySelector("button[id=reset2]").classList.add("display_none");
+            document.querySelector("input[type=date]").value = ""
+            document.querySelector("input[type=time]").value = ""
+            clearInterval(interv1);
+            document.getElementById("timer2").innerHTML = "";
+        }
+        function setTimer(millisecond, pid) {
+            millisecD = (Math.floor((millisecond % 1000) / 10)).toString().padStart(2, '0');
+                sec = Math.floor(millisecond / 1000);
+                secD = (sec % 60).toString().padStart(2, '0');
+                min = Math.floor((millisecond / 1000) / 60);
+                minD = (min % 60).toString().padStart(2, '0');
+                hour = Math.floor(((millisecond / 1000) / 60) / 60);
+                hourD = (hour % 24).toString().padStart(2, '0');
+                day = Math.floor((((millisecond / 1000) / 60) / 60) / 24);
+                dayD = day;
+
+                if (dayD == 1) {
+                    document.getElementById(pid).innerHTML = dayD + "day " + hourD + ":" + minD + ":" + secD + "  " + millisecD;
+                } else {
+                    document.getElementById(pid).innerHTML = dayD + "days " + hourD + ":" + minD + ":" + secD + "  " + millisecD;
+                }
+        }
+    </script>
+
+</body>
+
+</html>

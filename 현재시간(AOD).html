@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>현재시간(Always On Display)</title>
+    <style>
+        *{margin: 0 auto;}
+        html{background-color: black;}
+        html{height: 100%; width: 100%;}
+        body{height: 100%; width: 100%;}
+        #timeDisplay {
+            /* 220px 90px */
+            
+            width: 240px;
+            height: 70px;
+            padding-left: 42px;
+        }
+        #timezone{
+            text-align: left;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 30pt;
+            font-weight: normal;
+            line-height: 100%;
+            color: #ddd;
+        }
+        #datezone{
+            text-align: left;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 18pt;
+            font-weight: normal;
+            line-height: 100%;
+            color: #ddd;
+        }
+        #millisecondzone{
+            text-align: left;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 23pt;
+            font-weight: normal;
+            line-height: 100%;
+            color: #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <p id="timeDisplay"></p>
+
+    <script>
+        var str;
+        let widthRatio;
+        let heightRatio;
+        let widthBody = document.querySelector("body").clientWidth;
+        let heightBody = document.querySelector("body").clientHeight;
+        const widthTimeDisplay = document.getElementById("timeDisplay").offsetWidth;
+        const heightTimeDisplay = document.getElementById("timeDisplay").offsetHeight;
+        widthRatio = Math.random();
+        heightRatio = Math.random();
+        document.getElementById("timeDisplay").style = "margin-top:"+(heightBody-heightTimeDisplay)*heightRatio+"px; margin-left:"+(widthBody-widthTimeDisplay)*widthRatio+"px;";
+
+        interval = setInterval(() => {
+            var now = new Date();
+            const monthStr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+            str = "<span id=timezone>"+now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0')
+                +"  </span><span id=millisecondzone>"+ Math.floor((now.getMilliseconds()) / 10).toString().padStart(2, '0')+"</span><br>";
+            str += "<span id=datezone>"+monthStr[now.getMonth()]+" "+now.getDate().toString().padStart(2, '0')+" "+now.getFullYear()+"</span>"
+            document.getElementById("timeDisplay").innerHTML = str;
+        }, 10);
+
+        interval1 = setInterval(() => {
+            widthBody = document.querySelector("body").clientWidth;
+            heightBody = document.querySelector("body").clientHeight;
+            widthRatio = Math.random();
+            heightRatio = Math.random();
+            document.getElementById("timeDisplay").style = "margin-top:"+(heightBody-heightTimeDisplay)*heightRatio+"px; margin-left:"+(widthBody-widthTimeDisplay)*widthRatio+"px;";
+        }, 180000);
+
+        window.onresize = function () {
+            widthBody = document.querySelector("body").clientWidth;
+            heightBody = document.querySelector("body").clientHeight;
+            document.getElementById("timeDisplay").style = "margin-top:"+(heightBody-heightTimeDisplay)*heightRatio+"px; margin-left:"+(widthBody-widthTimeDisplay)*widthRatio+"px;";
+        }
+    </script>
+
+</body>
+
+</html>

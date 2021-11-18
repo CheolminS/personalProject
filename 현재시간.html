@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>현재시간</title>
+    <style>
+        *{margin: 0 auto;}
+        html{background-color: black;}
+        #timezone{
+            text-align: left;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 22pt;
+            font-weight: bolder;
+            line-height: 100%;
+            color: #ddd;
+        }
+        #datezone{
+            text-align: left;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 14pt;
+            font-weight: bolder;
+            line-height: 100%;
+            color: #ddd;
+        }
+        #millisecondzone{
+            text-align: left;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 18pt;
+            font-weight: bolder;
+            line-height: 100%;
+            color: #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <p id="timeDisplay"></p>
+    <button>record</button>
+    <ul id = "record"><hr></ul>
+
+    <script>
+        var str;
+        interval = setInterval(() => {
+            var now = new Date();
+            const monthStr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+            str = "<span id=timezone>"+now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0')
+                +"  </span><span id=millisecondzone>"+ Math.floor((now.getMilliseconds()) / 10).toString().padStart(2, '0')+"</span><br>";
+            str += "<span id=datezone>"+monthStr[now.getMonth()]+" "+now.getDate().toString().padStart(2, '0')+" "+now.getFullYear()+"</span>"
+            document.getElementById("timeDisplay").innerHTML = str;
+        }, 10);
+        document.querySelector("button").onclick = function () {
+            var strRecord = "<li>"+str+"</li><hr>"
+            document.getElementById("record").innerHTML += strRecord;
+        }
+    </script>
+
+</body>
+
+</html>

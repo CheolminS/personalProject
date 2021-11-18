@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>소인수분해.html</title>
+    <style>
+        html{background-color: black;}
+        h1{color: #ddd;}
+        input{background-color: rgba(169, 169, 169, 0.5); color: #ddd;}
+        .number{font-family: 'Times New Roman', Times, serif; color: skyblue; font-size: 30pt; font-weight: bolder;}
+    </style>
+</head>
+<body>
+    <h1>소인수분해</h1>
+    <input type="number" min="2" placeholder="2 이상의 자연수">
+    <button id="calculate">소인수분해하기</button>
+    <div class="number"></div>
+    <script>
+        function getPrimes(num) {
+            var primeArray = [2];
+            var i = 3;
+            while (i <= Math.floor(Math.sqrt(num))) {
+                var divided = 0;
+                for (let j = 2; j < i; j++) {
+                    if (i % j == 0) {
+                        divided++;
+                    }
+                }
+                if (divided == 0) {
+                    primeArray.push(i);
+                }
+                i += 2;
+            }
+            return primeArray;
+        }
+        document.getElementById("calculate").onclick = function () {
+            var number = parseInt(document.querySelector("input[type=number]").value);
+            var input = number;
+            var primeArray = getPrimes(number);
+            var numPrimeList = [];
+            for (let i = 0; i < primeArray.length; i++) {
+                var exp = 0;
+                var facExp = [];
+                while (number % primeArray[i] == 0) {
+                    number = number / primeArray[i];
+                    exp++;
+                }
+                if (exp > 0) {
+                    facExp.push(primeArray[i]);
+                    facExp.push(exp);
+                }
+                if(facExp.length > 0){
+                    numPrimeList.push(facExp);
+                }
+            }
+            if(number > 1){
+                numPrimeList.push([number,1]);
+            }
+            document.querySelector("div").innerHTML = input+"=";
+            for (let i = 0; i < numPrimeList.length; i++) {
+                document.querySelector("div").innerHTML += (numPrimeList[i])[0];
+                if((numPrimeList[i])[1] > 1){
+                    document.querySelector("div").innerHTML += "<sup>"+(numPrimeList[i])[1]+"</sup>";
+                }
+                if (i < numPrimeList.length-1) {
+                    document.querySelector("div").innerHTML += "×";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
